@@ -3,102 +3,55 @@ var app = new Vue({
 			data() {
 				return {
 					pessoas: [],
-					pessoaAlt: undefined,
-					nome : undefined,
-					sexo : undefined,
-					dataNascimento: undefined,
-					endereco : undefined,
-					numero: undefined,
-					cep : undefined,
-					municipio : undefined,
-					uf : undefined
+					pessoa: {
+						nome : undefined,
+						sexo : undefined,
+						dataNascimento: undefined,
+						endereco: {
+							logradouro: undefined,
+							numero: undefined,
+							cep: undefined,
+							municipio: undefined,
+							uf: undefined
+						}
+					}
 				}
 			},
 			methods : {
 				cadastrar() {
-					let req = {
-						nome: this.nome,
-						sexo: this.sexo,
-						dataNascimento: this.dataNascimento,
-						endereco: {
-							logradouro: this.endereco,
-							numero: this.numero,
-							cep: this.cep,
-							municipio: this.municipio,
-							uf: this.uf
-						}
-					};
-					this.executePost('pessoa/salvar', JSON.stringify(req));
+					this.executePost('pessoa/salvar', this.pessoa);
 				},
 				selecionarPessoa(p) {
-					this.pessoaAlt = p;
+					this.pessoa = p;
 				},
-				alterar(pessoa) {
-					let req = {
-							id: pessoa.id,
-							nome: this.nome,
-							sexo: this.sexo,
-							dataNascimento: this.dataNascimento,
-							endereco: {
-								id: pessoa.endereco.id,
-								logradouro: this.endereco,
-								numero: this.numero,
-								cep: this.cep,
-								municipio: this.municipio,
-								uf: this.uf
-							}
-						};
-					this.executePost('pessoa/salvar', JSON.stringify(req));
+				alterar() {
+					this.executePost('pessoa/salvar', this.pessoa);
 				},
-				excluir(pessoa) {
-					this.executePost('pessoa/excluir', JSON.stringify(pessoa));
+				excluir() {
+					this.executePost('pessoa/excluir', this.pessoa);
 				},
 				limpar() {
-					this.nome = undefined;
-					this.sexo = undefined;
-					this.dataNascimento = undefined;
-					this.endereco = undefined;
-					this.numero = undefined;
-					this.cep = undefined;
-					this.municipio = undefined;
-					this.uf = undefined;
-					this.pessoaAlt = undefined;
-				},
-				executePost(url, json) {
-					let xhr = new XMLHttpRequest();
-					xhr.open("POST", url);
-					xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-					xhr.send(json);
-					xhr.onload = function() {
-						if (xhr.status != 200) {
-							alert(`Error ${xhr.status}: ${xhr.statusText}`);
-						} else {
-							alert('Operação realizada com sucesso!');
+					this.pessoa = {
+						nome : undefined,
+						sexo : undefined,
+						dataNascimento: undefined,
+						endereco: {
+							logradouro: undefined,
+							numero: undefined,
+							cep: undefined,
+							municipio: undefined,
+							uf: undefined
 						}
 					};
-					xhr.onerror = function() {
-						alert("Request failed");
-					};
+				},
+				executePost(url, json) {
+					axios.post(url, json).then(res => alert('Operação realizada com sucesso!')).catch(err => console.error(err));
 				},
 				carregaPessoas(pessoas) {
 					this.pessoas = pessoas;
 				}
 			},
-			mounted() {
-				let vm = this;
-					//carrega as pessoas assim que a tela é carregada completamente
-					let xhr = new XMLHttpRequest();
-					xhr.open("GET", 'pessoa/consultar');
-					xhr.onload = function() {
-						if (xhr.status != 200) {
-							alert(`Error ${xhr.status}: ${xhr.statusText}`);
-						} else {
-							vm.carregaPessoas(JSON.parse(xhr.response));
-						}
-					};
-					xhr.onerror = function() {
-						alert("Request failed");
-					};
-					xhr.send();
-			}
+			mounted () {
+    			axios.get('pessoa/consultar').then(res => this.pessoas = res.data);
+  			}
 		})

@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Cadastro de Pessoas - 4Blue</title>
-<link href=css/main.css rel=preload as=style>
+<link rel="stylesheet" media="all" href="css/main.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="js/axios.min.js"></script>
 </head>
 <body>
 <h3>Cadastro de Pessoas - Teste 4Blue</h3>
@@ -19,7 +20,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for"p in pessoas" :key="p.id" @click="selecionarPessoa(p)">
+				<tr v-for="p in pessoas" :key="p.id" @click="selecionarPessoa(p)">
 					<td>{{p.nome}}</td>
 					<td>{{p.idade}}</td>
 					<td>{{p.sexo}}</td>
@@ -27,34 +28,35 @@
 				</tr>
 			</tbody>
 		</table>
-
+		<br/>
+		<br/>
 		<div class="formCadastro">
 			<label for="nome">Nome</label> <input id="nome" type=text
-				v-model="nome" placeholder="Nome" />
+				v-model="pessoa.nome" placeholder="Nome" />
 				<br/>
 				<br/>
 				<label for="sexo">Sexo</label>
-			<select id="sexo" v-model="sexo">
+			<select id="sexo" v-model="pessoa.sexo">
 				<option value="M">Masculino</option>
 				<option value="F">Feminino</option>
 			</select>
 			<br/><br/>
 			<label for="dataNascimento">Data de Nascimento</label> <input
-				type="date" v-model="dataNascimento" /><br/><br/> <label for="endereco">Endereço</label>
-			<input id="endereco" type=text v-model="endereco"
+				type="date" v-model="pessoa.dataNascimento" /><br/><br/> <label for="endereco">Endereço</label>
+			<input id="endereco" type=text v-model="pessoa.endereco.logradouro"
 				placeholder="Endereço" /><br/><br/> <label for="numero">Número</label> <input
-				id="numero" type="number" v-model="numero" placeholder="Número" />
+				id="numero" type="number" v-model="pessoa.endereco.numero" placeholder="Número" />
 				<br/><br/>
-			<label for="cep">CEP</label> <input id="cep" type=text v-model="cep"
+			<label for="cep">CEP</label> <input id="cep" type=text v-model="pessoa.endereco.cep"
 				placeholder="CEP" /><br/><br/> <label for="municipio">Município</label> <input
-				id="municipio" type=text v-model="municipio" placeholder="Município" />
-			<br/><br/><label for="uf">UF</label> <input id="uf" type=text v-model="uf"
+				id="municipio" type=text v-model="pessoa.endereco.municipio" placeholder="Município" />
+			<br/><br/><label for="uf">UF</label> <input id="uf" type=text v-model="pessoa.endereco.uf"
 				placeholder="UF" />
 				<br/><br/>
 				<button @click="cadastrar()">Salvar</button>
 				<button @click="limpar()">Limpar</button>
-				<button v-if="pessoaAlt" @click="alterar(pessoaAlt)">Alterar</button>
-				<button v-if="pessoaAlt" @click="excluir(pessoaAlt)">Excluir</button>
+				<button v-if="pessoa.id" @click="alterar">Alterar</button>
+				<button v-if="pessoa.id" @click="excluir">Excluir</button>
 		</div>
 	</div>
 	<script src="js/cadastro.js"></script>
