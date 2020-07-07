@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.joaolutz.crud4blue.bo.PessoaBO;
 import br.com.joaolutz.crud4blue.model.Pessoa;
-import br.com.joaolutz.crud4blue.repository.EnderecoRepository;
 import br.com.joaolutz.crud4blue.repository.PessoaRepository;
 
 @RestController

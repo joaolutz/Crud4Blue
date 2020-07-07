@@ -1,3 +1,21 @@
+function init() {
+	let vm = this;
+					//carrega as pessoas assim que a tela é carregada completamente
+					let xhr = new XMLHttpRequest();
+					xhr.open("GET", 'pessoa/consultar');
+					xhr.onload = function() {
+						if (xhr.status != 200) {
+							alert(`Error ${xhr.status}: ${xhr.statusText}`);
+						} else {
+							vm.pessoas = JSON.parse(xhr.response);
+						}
+					};
+					xhr.onerror = function() {
+						alert("Request failed");
+					};
+					xhr.send();
+}
+
 var app = new Vue({
 			el : '#app',
 			data() {
@@ -64,13 +82,6 @@ var app = new Vue({
 					this.uf = undefined;
 					this.pessoaAlt = undefined;
 				},
-				carregaPessoas(xhr) {
-					if (xhr.status != 200) {
-							alert(`Error ${xhr.status}: ${xhr.statusText}`);
-						} else {
-							this.pessoas = JSON.parse(xhr.response);
-						}
-				},
 				executePost(url, json) {
 					let xhr = new XMLHttpRequest();
 					xhr.open("POST", url);
@@ -86,16 +97,10 @@ var app = new Vue({
 					xhr.onerror = function() {
 						alert("Request failed");
 					};
-				}
+				},
+				init
 			},
-			mounted: function() {
-					//carrega as pessoas assim que a tela é carregada completamente
-					let xhr = new XMLHttpRequest();
-					xhr.open("GET", 'pessoa/consultar');
-					xhr.onload = this.carregaPessoas(xhr);
-					xhr.onerror = function() {
-						alert("Request failed");
-					};
-					xhr.send();
+			mounted() {
+				init.call(this);
 			}
 		})

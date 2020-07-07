@@ -64,9 +64,6 @@ var app = new Vue({
 					this.uf = undefined;
 					this.pessoaAlt = undefined;
 				},
-				carregaPessoas(xhr) {
-					
-				},
 				executePost(url, json) {
 					let xhr = new XMLHttpRequest();
 					xhr.open("POST", url);
@@ -82,9 +79,13 @@ var app = new Vue({
 					xhr.onerror = function() {
 						alert("Request failed");
 					};
+				},
+				carregaPessoas(pessoas) {
+					this.pessoas = pessoas;
 				}
 			},
-			mounted: function() {
+			mounted() {
+				let vm = this;
 					//carrega as pessoas assim que a tela é carregada completamente
 					let xhr = new XMLHttpRequest();
 					xhr.open("GET", 'pessoa/consultar');
@@ -92,7 +93,7 @@ var app = new Vue({
 						if (xhr.status != 200) {
 							alert(`Error ${xhr.status}: ${xhr.statusText}`);
 						} else {
-							this.pessoas = JSON.parse(xhr.response);
+							vm.carregaPessoas(JSON.parse(xhr.response));
 						}
 					};
 					xhr.onerror = function() {
