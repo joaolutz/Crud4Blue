@@ -2,13 +2,19 @@ package br.com.joaolutz.crud4blue.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name="pessoa")
@@ -22,11 +28,15 @@ public class Pessoa {
 	private String nome;
 	@Column(name="DATA_NASCIMENTO")
 	private Date dataNascimento;
+	@Enumerated(EnumType.STRING)
 	@Column(name="SEXO")
 	private Sexo sexo;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="ENDERECO")
 	private Endereco endereco;
+	@Transient
+	private String idade;
+	
 	/**
 	 * @return the id
 	 */
@@ -86,6 +96,18 @@ public class Pessoa {
 	 */
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+	/**
+	 * @return the idade
+	 */
+	public String getIdade() {
+		return idade;
+	}
+	/**
+	 * @param idade the idade to set
+	 */
+	public void setIdade(String idade) {
+		this.idade = idade;
 	}
 
 }
